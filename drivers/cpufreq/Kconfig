@@ -97,6 +97,13 @@ config CPU_FREQ_DEFAULT_GOV_ONDEMAND
 	  governor. If unsure have a look at the help section of the
 	  driver. Fallback governor will be the performance governor.
 
+config CPU_FREQ_DEFAULT_GOV_ONDEMANDX
+	bool "ondemandx"
+	select CPU_FREQ_GOV_ONDEMANDX
+	help
+	  Use the CPUFreq governor 'ondemandx' as default. See 
+	  ondemandx governor help for more details.
+
 config CPU_FREQ_DEFAULT_GOV_CONSERVATIVE
 	bool "conservative"
 	select CPU_FREQ_GOV_CONSERVATIVE
@@ -117,6 +124,13 @@ config CPU_FREQ_DEFAULT_GOV_INTERACTIVE
 	  you to get a full dynamic cpu frequency capable system by simply
 	  loading your cpufreq low-level hardware driver, using the
 	  'interactive' governor for latency-sensitive workloads.
+
+config CPU_FREQ_DEFAULT_GOV_INTERACTIVEX
+	bool "interactivex"
+	select CPU_FREQ_GOV_INTERACTIVEX
+	help
+	  Use the CPUFreq governor 'interactivex' as default. See
+	  interactivex governor help for more details.
 
 endchoice
 
@@ -175,6 +189,18 @@ config CPU_FREQ_GOV_ONDEMAND
 
 	  If in doubt, say N.
 
+config CPU_FREQ_GOV_ONDEMANDX
+	tristate "'ondemandx' cpufreq governor"
+	depends on CPU_FREQ
+	help
+	  Basically an ondemand with suspend and wake profiles. When screen
+	  is off, max frequency is capped at 500MHz. Even though ondemand
+	  is the default governor in many kernels and is considered safe and
+	  stable, the support for this governor depends on CPU capability to
+	  do fast frequency switching which are very low latency frequency
+	  transitions. Performance of ondemand/ondemandx varies for different
+	  io schedulers. Ondemand/ondemandx goes best with SIO io scheduler.
+
 config CPU_FREQ_GOV_INTERACTIVE
 	tristate "'interactive' cpufreq policy governor"
 	help
@@ -191,6 +217,16 @@ config CPU_FREQ_GOV_INTERACTIVE
 	  For details, take a look at linux/Documentation/cpu-freq.
 
 	  If in doubt, say N.
+
+config CPU_FREQ_GOV_INTERACTIVEX
+	tristate "'interactivex' cpufreq governor"
+	depends on CPU_FREQ
+	help
+	  Created by kernel developer Imoseyon, the governor is based
+	  heavily on the Interactive governor, enhanced with tuned timer
+	  parameters for better balance. The defining feature is that it
+	  locks the CPU frequency to the users lowest defined speed when
+	  the screen is off.
 
 config CPU_FREQ_GOV_CONSERVATIVE
 	tristate "'conservative' cpufreq governor"
